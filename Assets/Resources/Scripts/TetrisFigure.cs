@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class TetrisFigure : MonoBehaviour
 {
+    // script my_tetrino_figure
     public void DropTetrisFigure(bool isPositive)
     {
         if (isPositive)
@@ -12,5 +13,10 @@ public class TetrisFigure : MonoBehaviour
         {
             transform.Translate(Vector3.up);
         }
+    }
+
+    public TetrisFigureSegmetn[] GetSegmetns()
+    {
+        return GetComponentsInChildren<TetrisFigureSegmetn>();
     }
 }

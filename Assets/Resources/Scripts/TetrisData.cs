@@ -58,19 +58,19 @@ public class TetrisData : MonoBehaviour
     {
         _type = figureType;
         GameObject segment1 = Instantiate(_prefabCube, segmentPosition1, Quaternion.identity);
-        segment1.AddComponent<TetrisSegmetn>();
+        segment1.AddComponent<TetrisFigureSegmetn>();
         segment1.transform.SetParent(transform, false);
 
         GameObject segment2 = Instantiate(_prefabCube, segmentPosition2, Quaternion.identity);
-        segment2.AddComponent<TetrisSegmetn>();
+        segment2.AddComponent<TetrisFigureSegmetn>();
         segment2.transform.SetParent(transform, false);
 
         GameObject segment3 = Instantiate(_prefabCube, segmentPosition3, Quaternion.identity);
-        segment3.AddComponent<TetrisSegmetn>();
+        segment3.AddComponent<TetrisFigureSegmetn>();
         segment3.transform.SetParent(transform, false);
 
         GameObject segment4 = Instantiate(_prefabCube, segmentPosition4, Quaternion.identity);
-        segment4.AddComponent<TetrisSegmetn>();
+        segment4.AddComponent<TetrisFigureSegmetn>();
         segment4.transform.SetParent(transform, false);
 
         for (int i = 0; i < _tetrisFigures.Length; i++)
