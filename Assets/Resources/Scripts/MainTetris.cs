@@ -8,6 +8,7 @@ public class MainTetris : MonoBehaviour
     private const int Height = 21;
     private const int Width = 13;
     private float _step = 1;
+    private float _currentTime;
     private GameObject _prefabTetrisFigure;
     private Object _prefabTetrisCell;
     private TetrisFigure _tetrisFigure;
@@ -15,6 +16,7 @@ public class MainTetris : MonoBehaviour
 
     private void Start()
     {
+        _currentTime = 0;
         _fieldCells = new TetrisFieldElement[Width, Height];
         _prefabTetrisFigure = Resources.Load("Prefabs/TetrisFigure") as GameObject;
         _prefabTetrisCell = Resources.Load("Prefabs/CellPrefab");
@@ -23,6 +25,49 @@ public class MainTetris : MonoBehaviour
 
         CreateFigure(TetrisFigures.Z);
         StartCoroutine(UpdateCoroutine(_speed));
+    }
+
+    private void Update()
+    {
+        InputPress(0.05f);
+    }
+
+    private void InputPress( float time)
+    {
+        _currentTime += Time.deltaTime;
+        if(_currentTime >= time)
+        {
+            _currentTime = 0;
+            float horizontalInput = Input.GetAxis("Horizontal");
+            float verticalInput = Input.GetAxis("Vertical");
+
+            if (horizontalInput < 0)
+            {
+                _tetrisFigure.SetDirectionFigure(DirectionFigure.LEFT);
+                if (CheckIntersect(_tetrisFigure))
+                {
+                    _tetrisFigure.SetDirectionFigure(DirectionFigure.RIGHT);
+                }
+
+            }
+            else if (horizontalInput > 0)
+            {
+                _tetrisFigure.SetDirectionFigure(DirectionFigure.RIGHT);
+                if (CheckIntersect(_tetrisFigure))
+                {
+                    _tetrisFigure.SetDirectionFigure(DirectionFigure.LEFT);
+                }
+            }
+            else if (verticalInput < 0)
+            {
+                _tetrisFigure.DropTetrisFigure(true);
+                if (CheckIntersect(_tetrisFigure))
+                {
+                    _tetrisFigure.DropTetrisFigure(false);
+                }
+            }
+
+        }
     }
 
     private void CreateFigure(TetrisFigures figures)
@@ -86,6 +131,21 @@ public class MainTetris : MonoBehaviour
             if (isIntersect)
             {
                 figure.DropTetrisFigure(false);
+                return isIntersect;
+            }
+        }
+
+        return false;
+    }private bool CheckIntersect(TetrisFigure figure)
+    {
+        for (int i = 0; i < figure.GetSegmetns().Length; i++)
+        {
+            int x = (int)figure.GetSegmetns()[i].transform.position.x;
+            int y = (int)figure.GetSegmetns()[i].transform.position.y;
+
+            bool isIntersect = IsIntersect(x, y);
+            if (isIntersect)
+            {
                 return isIntersect;
             }
         }
