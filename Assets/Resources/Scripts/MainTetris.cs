@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MainTetris : MonoBehaviour
@@ -23,25 +24,37 @@ public class MainTetris : MonoBehaviour
 
         CreateTetrisField();
 
-        CreateFigure(TetrisFigures.Z);
-        StartCoroutine(UpdateCoroutine(_speed));
+        CreateFigure(TetrisFigures.T);
+
     }
 
     private void Update()
     {
-        InputPress(0.05f);
+        if (_tetrisFigure)
+        {
+            InputPress(0.15f);
+        }
     }
 
-    private void InputPress( float time)
+    private void InputPress(float time)
     {
         _currentTime += Time.deltaTime;
-        if(_currentTime >= time)
+        if (_currentTime >= time)
         {
             _currentTime = 0;
             float horizontalInput = Input.GetAxis("Horizontal");
             float verticalInput = Input.GetAxis("Vertical");
 
-            if (horizontalInput < 0)
+            if (verticalInput > 0)
+            {
+                _tetrisFigure.GetComponentInChildren<TetrisData>().DirectionRotation(true);
+                if (CheckIntersect(_tetrisFigure))
+                {
+                    _tetrisFigure.GetComponentInChildren<TetrisData>().DirectionRotation(false);
+                }
+            }
+
+            else if (horizontalInput < 0)
             {
                 _tetrisFigure.SetDirectionFigure(DirectionFigure.LEFT);
                 if (CheckIntersect(_tetrisFigure))
@@ -74,6 +87,8 @@ public class MainTetris : MonoBehaviour
     {
         _tetrisFigure = Instantiate(_prefabTetrisFigure, new Vector3(_step * 6, _step * (Height - 2)), Quaternion.identity).GetComponent<TetrisFigure>();
         _tetrisFigure.GetComponentInChildren<TetrisData>().Initialize(figures);
+
+        StartCoroutine(UpdateCoroutine(_speed));
     }
 
     private IEnumerator UpdateCoroutine(float time)
@@ -83,11 +98,15 @@ public class MainTetris : MonoBehaviour
             yield return new WaitForSeconds(time);
             _tetrisFigure.DropTetrisFigure(true);
 
-            if(CheckPreIntersect(_tetrisFigure))
+            if (CheckPreIntersect(_tetrisFigure))
             {
                 break;
             }
         }
+        AddToArray();
+        Destroy(_tetrisFigure.gameObject);
+        RemoveFullLine();
+        CreateFigure(TetrisFigures.L);
     }
 
     private void CreateTetrisField()
@@ -116,7 +135,7 @@ public class MainTetris : MonoBehaviour
 
             return true;
         }
-        
+
         return false;
     }
 
@@ -136,7 +155,8 @@ public class MainTetris : MonoBehaviour
         }
 
         return false;
-    }private bool CheckIntersect(TetrisFigure figure)
+    }
+    private bool CheckIntersect(TetrisFigure figure)
     {
         for (int i = 0; i < figure.GetSegmetns().Length; i++)
         {
@@ -151,5 +171,128 @@ public class MainTetris : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void AddToArray()
+    {
+        GameObject[] figures = _tetrisFigure.GetComponentInChildren<TetrisData>().GetTetrisFigures;
+        for (int i = 0; i < figures.Length; i++)
+        {
+            int x = (int)figures[i].transform.position.x;
+            int y = (int)figures[i].transform.position.y;
+
+            _fieldCells[x, y].SetCellActive(true);
+        }
+    }
+
+    private void RemoveFullLine()
+    {
+        int[] removeLines = CheckFullLine();
+        for (int i = 0; i < removeLines.Length; i++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                _fieldCells[x, removeLines[i]].SetCellActive(false);
+            }
+        }
+
+        if (removeLines.Length != 0)
+        {
+            int[] emptyLines = CheckEmptyLine();
+            bool[,] activeCells = new bool[Width, Height];
+
+            int startY = 0;
+
+            for (int y = 0; y < Height; y++)
+            {
+                if (SkipTheLine(emptyLines, y))
+                {
+                    continue;
+                }
+                for (int x = 0; x < Width; x++)
+                {
+                    activeCells[x, startY] = _fieldCells[x, y].GetIsCellActive();
+                }
+                startY++;
+            }
+
+            SetNewCellsAray(activeCells);
+        }
+    }
+
+    private void SetNewCellsAray(bool[,] newArray)
+    {
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                _fieldCells[x, y].SetCellActive(newArray[x, y]);
+            }
+        }
+    }
+
+    private bool SkipTheLine(int[] emptyLine, int y)
+    {
+        for (int i = 0; i < emptyLine.Length; i++)
+        {
+            if (emptyLine[i] == y)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private int[] CheckEmptyLine()
+    {
+        List<int> lines = new List<int>();
+        for (int i = 0; i < Height; i++)
+        {
+            int countLineX = 0;
+            for (int j = 0; j < Width; j++)
+            {
+                if (_fieldCells[j, i].GetIsCellActive())
+                {
+                    break;
+                }
+                else
+                {
+                    countLineX++;
+                }
+            }
+
+            if (countLineX == Width)
+            {
+                lines.Add(i);
+            }
+        }
+        return lines.ToArray();
+    }
+
+    private int[] CheckFullLine()
+    {
+        List<int> lines = new List<int>();
+        for (int i = 0; i < Height; i++)
+        {
+            int countLineX = 0;
+            for (int j = 0; j < Width; j++)
+            {
+                if (_fieldCells[j, i].GetIsCellActive())
+                {
+                    countLineX++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            if (countLineX == Width)
+            {
+                lines.Add(i);
+            }
+        }
+        return lines.ToArray();
     }
 }

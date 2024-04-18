@@ -16,9 +16,9 @@ public class TetrisFieldElement : MonoBehaviour
         return _fieldCell.gameObject.activeSelf;
     }
 
-    public void SetCellActive()
+    public void SetCellActive(bool active)
     {
-        _fieldCell.gameObject.SetActive(true);
+        _fieldCell.gameObject.SetActive(active);
     }
 
     public void SetCellColor(Color color)

@@ -25,6 +25,8 @@ public class TetrisFigure : MonoBehaviour
 
     public void SetDirectionFigure(DirectionFigure direction)
     {
-        transform.Translate((int)direction, 0 , 0);
+        //transform.Translate((int)direction, 0, 0);
+        Vector3 newPosition = transform.position + new Vector3((int)direction, 0, 0);
+        transform.position = newPosition;
     }
 }

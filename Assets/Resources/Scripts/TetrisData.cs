@@ -16,6 +16,8 @@ public class TetrisData : MonoBehaviour
     private GameObject[] _tetrisFigures;
     private int _rotation;
 
+    public GameObject[] GetTetrisFigures {  get { return _tetrisFigures; } }
+
     private void Awake()
     {
         _rotation = 0;
@@ -76,6 +78,208 @@ public class TetrisData : MonoBehaviour
         for (int i = 0; i < _tetrisFigures.Length; i++)
         {
             _tetrisFigures[i] = transform.GetChild(i).gameObject;
+        }
+    }
+
+    public void DirectionRotation(bool isPositive)
+    {
+        if (isPositive)
+        {
+            _rotation++;
+            _rotation %= 4;
+        }
+        else
+        {
+            _rotation--;
+            if (_rotation < 0)
+            {
+                _rotation = 3;
+            }
+        }
+
+        FigureRotation(_type, _rotation);
+    }
+
+    private void FigureRotation(TetrisFigures figures, int rotation)
+    {
+        switch (rotation)
+        {
+            case 0:
+                if(figures == TetrisFigures.L)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(0, 1, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(0, -1, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(1, -1, 0);
+                }
+              
+                else if(figures == TetrisFigures.Z)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(0, 1, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(-1, 1, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(1, 0, 0);
+                }
+
+                else if (figures == TetrisFigures.I)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(0, -1, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(0, 1, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(0, 2, 0);
+                }
+
+                else if (figures == TetrisFigures.O)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(-1, 0, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(-1, -1, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(0, -1, 0);
+                }
+
+                else if (figures == TetrisFigures.T)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(1, 0, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(-1, 0, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(0, 1, 0);
+                }
+
+                break; 
+
+            case 1:
+                if(figures == TetrisFigures.L)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(1, 0, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(-1, 0, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(-1, -1, 0);
+                }
+
+                else if (figures == TetrisFigures.Z)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(1, 0, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(1, 1, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(0, -1, 0);
+                }
+
+                else if (figures == TetrisFigures.I)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(-1, 0, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(1, 0, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(2, 0, 0);
+                }
+
+                else if (figures == TetrisFigures.O)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(-1, 0, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(-1, -1, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(0, -1, 0);
+                }
+
+                else if (figures == TetrisFigures.T)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(1, 0, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(0, -1, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(0, 1, 0);
+                }
+
+                break;
+
+            case 2:
+                if(figures == TetrisFigures.L)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(0, 1, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(0, -1, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(-1, 1, 0);
+                }
+
+                else if (figures == TetrisFigures.Z)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(0, 1, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(-1, 1, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(1, 0, 0);
+                }
+
+                else if (figures == TetrisFigures.I)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(0, -1, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(0, 1, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(0, 2, 0);
+                }
+
+                else if (figures == TetrisFigures.O)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(-1, 0, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(-1, -1, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(0, -1, 0);
+                }
+
+                else if (figures == TetrisFigures.T)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(1, 0, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(-1, 0, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(0, -1, 0);
+                }
+
+                break;
+
+            case 3:
+                if(figures == TetrisFigures.L)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(1, 0, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(-1, 0, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(1, 1, 0);
+                }
+
+                else if (figures == TetrisFigures.Z)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(1, 0, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(1, 1, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(0, -1, 0);
+                }
+
+                else if (figures == TetrisFigures.I)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(-1, 0, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(1, 0, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(2, 0, 0);
+                }
+
+                else if (figures == TetrisFigures.O)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(-1, 0, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(-1, -1, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(0, -1, 0);
+                }
+
+                else if (figures == TetrisFigures.T)
+                {
+                    _tetrisFigures[0].transform.localPosition = new Vector3(0, 0, 0);
+                    _tetrisFigures[1].transform.localPosition = new Vector3(0, 1, 0);
+                    _tetrisFigures[2].transform.localPosition = new Vector3(-1, 0, 0);
+                    _tetrisFigures[3].transform.localPosition = new Vector3(0, -1, 0);
+                }
+
+                break;
+
+            default:
+                break;
+            
+           
         }
     }
 }
